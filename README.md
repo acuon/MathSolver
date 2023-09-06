@@ -1,6 +1,6 @@
 # MathSolver App
 
-![MathSolver App by Wolfram Alpha](//upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Wolfram_Alpha_2022.svg/257px-Wolfram_Alpha_2022.svg.png)
+<!-- ![MathSolver App by Wolfram Alpha](https://products.wolframalpha.com/_next/static/images/cloud-icon_2GWj-tLX.png) -->
 
 MathSolver is a mobile application that allows users to input mathematical expressions and get instant solutions using the Wolfram Alpha API. It supports both single expressions and multiple expressions entered on separate lines.
 
