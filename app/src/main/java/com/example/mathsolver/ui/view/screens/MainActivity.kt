@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    // We use a special way to create a MainViewModel instance.
+    // creating viewmodel instance
     // This helps manage data in our app.
     private val viewModel: MainViewModel by viewModels()
 
@@ -44,11 +44,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         // We make sure that the keyboard doesn't change the layout of our app.
-
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         // Now we set up what our app looks like.
-
         setContent {
             MathSolverTheme {
                 // We create a special component to manage our app's layout.
@@ -56,18 +54,15 @@ class MainActivity : ComponentActivity() {
                 val coroutineScope = rememberCoroutineScope()
 
                 // We decide how wide the side menu (drawer) should be.
-
                 val drawerContentWidth = with(LocalDensity.current) {
                     (250.dp.toPx() / density).toInt()
                 }
 
                 // We check if the keyboard is shown on the screen.
-
                 val insets = LocalWindowInfo.current
                 val isKeyboardVisible = insets.isWindowFocused
 
                 // We keep track of whether the side menu (drawer) is open or closed.
-
                 var isDrawerOpen by remember { mutableStateOf(false) }
 
                 Surface(
