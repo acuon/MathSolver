@@ -8,7 +8,7 @@ MathSolver is a mobile application that allows users to input mathematical expre
 
 You can download the APK file of the MathSolver app from the following link:
 
-[Download MathSolver APK](https://github.com/your-username/your-repo-name/raw/main/app/apk/your-apk-file.apk)
+[Download MathSolver APK](https://github.com/acuon/MathSolver/blob/main/apk/app-debug.apk)
 
 
 ## Features
