@@ -11,6 +11,29 @@ You can download the APK file of the MathSolver app from the following link:
 [Download MathSolver APK](https://github.com/acuon/MathSolver/blob/main/apk/app-debug.apk)
 
 
+## Tech Stack
+
+MathSolver is built using the following technologies and libraries:
+
+- [Kotlin](https://kotlinlang.org/): The project is written in Kotlin, a modern and expressive programming language for Android development.
+
+- [Jetpack Compose](https://developer.android.com/jetpack/compose): Jetpack Compose is used for building the user interface (UI) of the application, enabling a more declarative and efficient way to create Android UIs.
+
+- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel): ViewModel is used to manage UI-related data and handle the communication between the UI and the underlying data sources.
+
+- [Hilt](https://dagger.dev/hilt/): Hilt is used for dependency injection, making it easier to manage and provide dependencies throughout the app.
+
+- [Room Database](https://developer.android.com/topic/libraries/architecture/room): Room is used for local data storage and managing the app's database.
+
+- [Retrofit](https://square.github.io/retrofit/): Retrofit is used for making network requests to the Wolfram Alpha API.
+
+- [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html): Coroutines are used to handle asynchronous operations, such as making network requests and database interactions, in a structured and efficient manner.
+
+- [Material Components for Android](https://material.io/develop/android/docs/getting-started): Material Components are used for designing a visually appealing and consistent user interface.
+
+This tech stack empowers MathSolver to provide a smooth and intuitive experience for users while efficiently handling math expression evaluations and history management.
+
+
 ## Features
 
 - Evaluate single mathematical expressions.
