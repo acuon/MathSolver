@@ -31,9 +31,12 @@ import com.example.mathsolver.ui.view.components.MathExpressionScreen
 import com.example.mathsolver.ui.view.components.TopBarApp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    // creating viewmodel instance
+    // This helps manage data in our app.
     // We use a special way to create a MainViewModel instance.
     // This helps manage data in our app.
     private val viewModel: MainViewModel by viewModels()
@@ -46,21 +49,27 @@ class MainActivity : ComponentActivity() {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         //set up what our app looks like.
+
+        // Now we set up what our app looks like.
         setContent {
             MathSolverTheme {
                 // We create a special component to manage our app's layout.
                 val scaffoldState = rememberScaffoldState()
                 val coroutineScope = rememberCoroutineScope()
 
+                // We decide how wide the side menu (drawer) should be.
+
                 //decide how wide the side menu (drawer) should be.
                 val drawerContentWidth = with(LocalDensity.current) {
                     (250.dp.toPx() / density).toInt()
                 }
 
+                // We check if the keyboard is shown on the screen.
                 // to check if the keyboard is shown on the screen.
                 val insets = LocalWindowInfo.current
                 val isKeyboardVisible = insets.isWindowFocused
 
+                // We keep track of whether the side menu (drawer) is open or closed.
                 // to keep track of whether the side menu (drawer) is open or closed.
                 var isDrawerOpen by remember { mutableStateOf(false) }
 
