@@ -1,8 +1,14 @@
 package com.example.mathsolver.di
 
 import android.app.Application
+import android.content.Context
+import android.util.Log
 import androidx.room.Room
+import androidx.startup.Initializer
+import androidx.work.Configuration
+import androidx.work.WorkManager
 import com.example.mathsolver.BuildConfig
+import com.example.mathsolver.MathSolverApplication
 import com.example.mathsolver.data.database.MathExpressionDao
 import com.example.mathsolver.data.database.MathExpressionDatabase
 import com.example.mathsolver.data.network.WolframAlphaService
@@ -11,6 +17,7 @@ import com.example.mathsolver.ui.view.MainViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -55,7 +62,9 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMainViewModel(repository: MathExpressionRepository): MainViewModel {
+    fun provideMainViewModel(
+        repository: MathExpressionRepository
+    ): MainViewModel {
         return MainViewModel(repository)
     }
 
@@ -76,7 +85,9 @@ object AppModule {
         return OkHttpClient.Builder().build()
     }
 
+
 }
+
 
 
 

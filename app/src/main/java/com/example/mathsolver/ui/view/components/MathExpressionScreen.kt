@@ -32,9 +32,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.mathsolver.data.database.MathExpressionHistoryEntity
 import com.example.mathsolver.utils.Option
 import com.example.mathsolver.utils.convertToList
-import com.example.mathsolver.utils.showToast
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,6 +43,7 @@ fun MathExpressionScreen(viewModel: MainViewModel, context: Context, padding: Pa
 
     val result by viewModel.expressionResult.collectAsState()
     val results by viewModel.allExpressions.collectAsState(initial = emptyList())
+    val resultsWorkManager by viewModel.expressionLiveData.collectAsState(initial = emptyList())
     val coroutineScope = rememberCoroutineScope()
     var userInput by remember { mutableStateOf("") }
     var selectedOption by remember { mutableStateOf(Option.SINGLE_EXPRESSION) }
@@ -93,7 +94,8 @@ fun MathExpressionScreen(viewModel: MainViewModel, context: Context, padding: Pa
             onValueChange = { newValue ->
                 userInput = newValue
             },
-            label = { Text("Enter expression(s)") }
+            label = { Text("Enter expression(s)") },
+            maxLines = 5
         )
 
         Button(
@@ -107,7 +109,10 @@ fun MathExpressionScreen(viewModel: MainViewModel, context: Context, padding: Pa
                             val singleExpression = expression.convertToList()[0]
                             viewModel.evaluateExpression(singleExpression)
                         }
-                        Option.MULTIPLE_EXPRESSIONS -> viewModel.evaluateMultipleExpressions(expression.convertToList())
+
+                        Option.MULTIPLE_EXPRESSIONS -> viewModel.evaluateMultipleExpressionsInBackground(
+                            expression.convertToList()
+                        )
                     }
                     userInput = ""
                     isApiCallInProgress = false
@@ -123,7 +128,10 @@ fun MathExpressionScreen(viewModel: MainViewModel, context: Context, padding: Pa
             CircularProgressIndicator()
         }
         LazyColumn {
-            items(if (selectedOption == Option.SINGLE_EXPRESSION) listOf(result) else results) { result ->
+            items(
+                if (selectedOption == Option.SINGLE_EXPRESSION) listOf(result) else resultsWorkManager
+                    ?: listOf(MathExpressionHistoryEntity("input", "inputt"))
+            ) { result ->
                 Text(text = "Expression: ${result?.expression}")
                 Text(text = "Result: ${result?.result}")
                 Spacer(modifier = Modifier.height(16.dp))

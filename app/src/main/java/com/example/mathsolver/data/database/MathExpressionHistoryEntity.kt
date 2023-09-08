@@ -25,4 +25,3 @@ data class MathExpressionHistoryEntity constructor(
     @Ignore
     constructor() : this(null, null, null)
 }
-

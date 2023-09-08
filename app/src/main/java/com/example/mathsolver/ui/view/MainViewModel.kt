@@ -1,14 +1,16 @@
 package com.example.mathsolver.ui.view
 
 import android.util.Log
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import com.example.mathsolver.MathSolverApplication
 import com.example.mathsolver.data.database.MathExpressionHistoryEntity
 import com.example.mathsolver.data.repository.MathExpressionRepository
+import com.example.mathsolver.workers.MathEvaluationWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -24,8 +26,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repository: MathExpressionRepository
+    private val repository: MathExpressionRepository,
 ) : ViewModel() {
+
+    private val applicationContext: MathSolverApplication
+        get() = MathSolverApplication.getAppContext()!!
+
+    private val workManager: WorkManager
+        get() = WorkManager.getInstance(applicationContext)
 
     private val _expressionResult = MutableStateFlow<MathExpressionHistoryEntity?>(null)
     val expressionResult: StateFlow<MathExpressionHistoryEntity?>
@@ -39,8 +47,31 @@ class MainViewModel @Inject constructor(
         repository.getAllExpressions()
             .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
+    private val _expressionLiveData = MutableStateFlow<List<MathExpressionHistoryEntity?>?>(emptyList())
+    val expressionLiveData: StateFlow<List<MathExpressionHistoryEntity?>?>
+        get() = _expressionLiveData
+
+
     fun updateExpression(expressionEntity: MathExpressionHistoryEntity) {
         _expressionResult.value = expressionEntity
+    }
+
+    fun evaluateMultipleExpressionsInBackground(expressions: List<String>) {
+
+        val inputData = Data.Builder()
+            .putStringArray("expressions", expressions.toTypedArray())
+            .build()
+
+        val workRequest = OneTimeWorkRequestBuilder<MathEvaluationWorker>().setInputData(inputData).build()
+
+        workManager.beginUniqueWork("work", ExistingWorkPolicy.REPLACE,
+            workRequest).enqueue()
+
+        workManager.getWorkInfoByIdLiveData(workRequest.id)
+            .observeForever { workInfo ->
+                Log.d("WorkManagerMathSolver", "WorkManager Success")
+                _expressionLiveData.value = repository.getLatestExpressionLiveData().value
+            }
     }
 
 

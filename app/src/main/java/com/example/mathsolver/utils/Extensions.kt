@@ -2,8 +2,11 @@ package com.example.mathsolver.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import com.example.mathsolver.workers.BackgroundService
 import java.util.Date
 
 
@@ -24,4 +27,14 @@ fun String.convertToList(): List<String> {
     } else {
         allExpressions
     }
+}
+
+fun startBackgroundService(context: Context) {
+    val intent = Intent(context, BackgroundService::class.java)
+    ContextCompat.startForegroundService(context, intent)
+}
+
+fun stopBackgroundService(context: Context) {
+    val intent = Intent(context, BackgroundService::class.java)
+    context.stopService(intent)
 }

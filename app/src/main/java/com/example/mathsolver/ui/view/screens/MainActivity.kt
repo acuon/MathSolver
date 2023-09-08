@@ -31,28 +31,37 @@ import com.example.mathsolver.ui.view.components.MathExpressionScreen
 import com.example.mathsolver.ui.view.components.TopBarApp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    // We use a special way to create a MainViewModel instance.
+    // This helps manage data in our app.
     private val viewModel: MainViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // We make sure that the keyboard doesn't change the layout of our app.
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
+        //set up what our app looks like.
         setContent {
             MathSolverTheme {
+                // We create a special component to manage our app's layout.
                 val scaffoldState = rememberScaffoldState()
                 val coroutineScope = rememberCoroutineScope()
+
+                //decide how wide the side menu (drawer) should be.
                 val drawerContentWidth = with(LocalDensity.current) {
                     (250.dp.toPx() / density).toInt()
                 }
 
+                // to check if the keyboard is shown on the screen.
                 val insets = LocalWindowInfo.current
                 val isKeyboardVisible = insets.isWindowFocused
 
+                // to keep track of whether the side menu (drawer) is open or closed.
                 var isDrawerOpen by remember { mutableStateOf(false) }
 
                 Surface(
@@ -62,11 +71,13 @@ class MainActivity : ComponentActivity() {
                     Scaffold(
                         scaffoldState = scaffoldState,
                         topBar = {
+                            // We create the top part of our app, including the title and history button.
                             TopBarApp(
                                 context = LocalContext.current,
                                 title = "Math Solver",
                                 onHistoryClicked = {
                                     coroutineScope.launch {
+                                        // When we click the history button, we toggle the side menu (drawer).
                                         isDrawerOpen = !isDrawerOpen
                                         if(scaffoldState.drawerState.isOpen) scaffoldState.drawerState.close()
                                         else scaffoldState.drawerState.open()
@@ -75,6 +86,7 @@ class MainActivity : ComponentActivity() {
                             )
                         },
                         drawerContent = {
+                            // This is where we put content for the side menu (drawer).
                             DrawerContent(
                                 viewModel = viewModel,
                                 width = drawerContentWidth,
@@ -82,6 +94,7 @@ class MainActivity : ComponentActivity() {
                             )
                         },
                         content = {
+                            // The main content of our app is the MathExpressionScreen.
                             MathExpressionScreen(
                                 viewModel = viewModel,
                                 context = LocalContext.current,
@@ -95,7 +108,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
+// This is a simple message display component.
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
@@ -104,6 +117,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
+// This is used to preview how the greeting message looks.
 @Composable
 @Preview(showBackground = true)
 fun GreetingPreview() {
