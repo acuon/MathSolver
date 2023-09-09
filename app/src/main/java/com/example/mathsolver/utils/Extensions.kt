@@ -22,11 +22,7 @@ fun Long?.getDate(): String? {
 
 fun String.convertToList(): List<String> {
     val allExpressions = split("\n").filter { it.isNotEmpty() }
-    return if (allExpressions.size > 50) {
-        allExpressions.subList(0, 50)
-    } else {
-        allExpressions
-    }
+    return allExpressions
 }
 
 fun startBackgroundService(context: Context) {
